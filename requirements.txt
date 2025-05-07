@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+httpx
+sqlite3-binary
+sentence-transformers
+faiss-cpu
+torch
+transformers
+peft
+datasets

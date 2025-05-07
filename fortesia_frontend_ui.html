@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>FortesIA Interface Web</title>
+</head>
+<body>
+  <h1>FortesIA</h1>
+  <textarea id="prompt" placeholder="Digite sua pergunta aqui..."></textarea><br/>
+  <button onclick="consultarIA()">Enviar</button>
+  <div id="output"></div>
+  <div id="feedback" style="display:none;">
+    <p>Feedback:</p>
+    <button onclick="feedback(1.0)">⭐️⭐️⭐️⭐️⭐️</button>
+    <button onclick="feedback(0.5)">⭐️⭐️⭐️</button>
+    <button onclick="feedback(0.0)">⭐️</button>
+  </div>
+
+<script>
+let respostaId = null;
+
+async function consultarIA() {
+  const prompt = document.getElementById("prompt").value;
+  document.getElementById("output").innerText = "Consultando FortesIA...";
+  const res = await fetch("http://localhost:8000/consultar", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({prompt})
+  });
+  const data = await res.json();
+  respostaId = data.id;
+  document.getElementById("output").innerText = data.resposta;
+  document.getElementById("feedback").style.display = "block";
+}
+
+async function feedback(score) {
+  await fetch("http://localhost:8000/feedback", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id: respostaId, score})
+  });
+  alert("Obrigado pelo feedback!");
+}
+</script>
+</body>
+</html>
